@@ -56,7 +56,6 @@ double findMode(vector<double> datavec)//function in finding the mode
     cout << "There is no mode";
   }
   cout << endl;
-  //be sure to clear variables--
 }
 
 double getRegression(vector <double> a, vector <double> b, vector <double> datavec)
@@ -65,6 +64,7 @@ double getRegression(vector <double> a, vector <double> b, vector <double> datav
   double sum_X = 0, sum_Y = 0, sum_XY = 0;
   double squareSum_X = 0, squareSum_Y = 0;
 
+  cout << endl << "---------------------Linear Regression---------------------"<< endl;
   cout <<endl<<"X-Data Values\tY-Data Values\t   Residuals " << endl;
 
   for (int i = 0; i < n/2; i++)
@@ -118,8 +118,8 @@ double getCoefficient(vector <double> a, vector <double> b, vector <double> data
   double corr = numerator/denominator;
   double corr2 = pow(corr,2);
 
-  cout << "The Correlation Coefficient = " << corr << endl;
-  cout << "Coefficient of Determination = " << corr2 << endl;
+  cout << "The Correlation Coefficient (r) = " << corr << endl;
+  cout << "Coefficient of Determination (r^2) = " << corr2 << endl;
 }
 
 double getMeasuresOfLocation(vector<double> datavec)
@@ -197,16 +197,21 @@ int main()
 {
   vector<double> datavec,a,b,q,w;
   double data;
-  int choice,choice1,choice2,choice4;
+  char choice,choice1,choice2,choice4;
+  int countX = 0, countY = 0,countXY = 0;
   string name,name1,name2,name3;
 
   startE:
-  cout<<"Choose: [1] Univariate Data, [2] Bivariate Data: ";
-  cin>>choice;
+  cout << "\t\tChoose:\n\t\t[1] Univariate Data: \n";
+  cout << "\t\t[2] Bivariate Data: \n";
+  cout << "\t\t input X to terminate program\n";
+  cout << "> ";
+  //give global command options
+  cin >> choice;
 
   switch (choice)
   {
-    case 1:
+    case '1':
     {
       startG:
       cout<< endl<< "Enter the filename of the univariate data: ";
@@ -231,25 +236,25 @@ int main()
 
       switch(choice1)
       {
-        case 1:
+        case '1':
           getMeasuresOfLocation(datavec);
           getSampleVariance(datavec);
           break;
-        case 2:
+        case '2':
           getMeasuresOfLocation(datavec);
           getPopulationVariance(datavec);
           break;
       }
       break;
     }
-    case 2:
+    case '2':
     {
-      cout<<"X-Y Data is in [1]One File, [2]Separate File: ";
+      cout<<"X-Y Data is in [1]One File, [2]Separate File: " << endl;
       cin>>choice2;
 
       switch(choice2)
       {
-        case 1:
+        case '1':
         {
           startH:
           cout<< "Enter the filename of the bivariate data: ";
@@ -264,7 +269,18 @@ int main()
           }
           while (file>>data)
           {
+            countXY++;
             datavec.push_back(data);
+          }
+          if ((countXY % 2) != 0) //Checks for the validity of data in the file
+          {
+            cout << "The selected file is invalid\n";
+            cout << "There is an odd number of data in the file\n";
+            cout << "Please select another file\n";
+            datavec.clear();
+            countXY = 0;
+            file.close();
+            goto startH;
           }
           for(int i =0; i<datavec.size(); i++)
           {
@@ -280,9 +296,10 @@ int main()
           }
           getRegression(a,b,datavec);
           getCoefficient(a,b,datavec);
+          goto startF;
           break;
         }
-        case 2:
+        case '2': //for the separate files
         {
           startJ:
           cout << "Enter filename of X-data: ";
@@ -297,6 +314,7 @@ int main()
           }
           while (file >> data)
           {
+            countX++;
             q.push_back(data);
           }
           startK:
@@ -308,13 +326,26 @@ int main()
           if (!file1.is_open())
           {
             cout << "There was a problem opening the input file!\n";
-                        goto startK;
+            goto startK;
           }
           while (file1 >> data)
           {
+            countY++;
             w.push_back(data);
           }
-
+          if (countX != countY)//Checks for the validity of the selected files
+          {
+            cout << "The selected file is invalid\n";
+            cout << "There is an odd number of data in the file\n";
+            cout << "Please select another file\n";
+            countX = 0;
+            countY = 0;
+            file.close();
+            file1.close();
+            q.clear();
+            w.clear();
+            goto startJ;
+          }
           for (int v = 0; v < ((q.size())+(w.size())); v++)
           {
             datavec.push_back(0);
@@ -343,18 +374,22 @@ int main()
           break;
         }
       }
-        break;
+        case '.':
+          cout << "Program Terminated";
+          return 0;
+          break;
     }
       default: goto startE;
     }
     startF:
-    cout << endl<<"---Do you want to use the calculator again?--- \n [1] YES \n [2] NO" << endl << "Enter your choice: " ;
+    cout << endl<<"---Do you want to use the calculator again?--- \n [1] YES \n [2] NO";
+    cout << endl << "Enter your choice: " ;
     cin >> choice4;
     cout << endl;
 
     switch(choice4)
     {
-      case 1: //YES
+      case '1': //YES
       {
         cout << endl<< endl;
         datavec.clear();
@@ -362,15 +397,26 @@ int main()
         b.clear();
         q.clear();
         w.clear();
+        system("CLS");
         goto startE;
         break;
       }
-      case 2: //NO
+      case '2': //NO
       {
         cout << "Program Ended";
         break;
       }
-      default: goto startF;
+      case '.': //universal exit
+      {
+        cout << "\nProgram terminated\n";
+        //return 0;
+        break;
+      }
+      default:
+        cout << "Invalid Input";
+        system("CLS");
+        cout << "Invalid Input";
+        goto startF;
     }
 }
 
