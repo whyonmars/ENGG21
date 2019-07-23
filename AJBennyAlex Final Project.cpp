@@ -5,6 +5,31 @@
 #include <math.h>
 #include <bits/stdc++.h>
 using namespace std;
+string Header()
+{
+  cout << "ENGG11 CMD Stat[Version 4.0]" << endl;
+  cout << "CMD Basic Statistics Software\n";
+  cout << "----------------------------------------" << endl;
+  cout << "| Univariate\n";
+  cout << "| ---Mead\n";
+  cout << "| ---Median\n";
+  cout << "| ---Mode\n";
+  cout << "| ---Population//Sample Standard Deviation\n";
+  cout << "| ---Variance\n";
+  cout << "| ---Max Value\n";
+  cout << "| ---Min Value\n";
+  cout << "| Bivariate\n";
+  cout << "| ---Correlation Coefficient\n";
+  cout << "| ---Coefficient of Determination\n";
+  cout << "| ---Statistics of Least Square Fit Residuals\n";
+  cout << "| ---Line Equation of the Regression\n";
+  cout << "----------------------------------------" << endl;
+  cout << "Commands: [command] \n";
+  cout << "[.] - exit\n";
+  cout << "----------------------------------------" << endl;
+}
+string export1(); //Univariate;
+string export2(); //Multivariate
 double findMode(vector<double> datavec)//function in finding the mode
 {
   int data, counter, num, max = 0, modes = 0;
@@ -126,13 +151,14 @@ double getMeasuresOfLocation(vector<double> datavec)
 {
   int n=datavec.size();
   double y,z,median, mode, counter,counter1;
+  cout << "----------------------------------------" << endl;
   cout << "Data Values: ";
 
   //Mean
   for(int i = 0; i<n; i++)
   {
     y = y + datavec[i];
-    cout <<"  " << datavec[i];
+    cout << " " << datavec[i];
   }
   cout<<endl<<"Mean: "<<y/n<<endl;
 
@@ -154,9 +180,10 @@ double getMeasuresOfLocation(vector<double> datavec)
   //Maximum_and_Minimum
   cout << "The data's minimum is "<< datavec.front() << endl;
   cout << "The data's maximum is "<< datavec.back() << endl;
+
 }
 
-double getSampleVariance(vector<double> datavec)
+double getSampleVariance(vector<double> datavec) //Sample Variance
 {
   int n=datavec.size();
   double sumSquared=0;
@@ -172,9 +199,10 @@ double getSampleVariance(vector<double> datavec)
   SAvariance=(n*sumSquared-sumANDsquared)/(n*(n-1));
   cout<<"Variance of the Data is: "<<SAvariance<<endl;
   cout<<"Standard Deviation is: "<<sqrt(SAvariance)<<endl;
+  cout << "----------------------------------------" << endl;
 }
 
-double getPopulationVariance(vector<double> datavec)
+double getPopulationVariance(vector<double> datavec) //Population Variance
 {
   int n=datavec.size();
   double sumSquared=0;
@@ -190,11 +218,13 @@ double getPopulationVariance(vector<double> datavec)
   POPvariance=(n*sumSquared-sumANDsquared)/(n*(n));
   cout<<"Variance of the Data is: "<<POPvariance<<endl;
   cout<<"Standard Deviation is: "<<sqrt(POPvariance)<<endl;
+  cout << "----------------------------------------" << endl;
 }
 
 
 int main()
 {
+  system("title CMD Stat");
   vector<double> datavec,a,b,q,w;
   double data;
   char choice,choice1,choice2,choice4;
@@ -202,27 +232,37 @@ int main()
   string name,name1,name2,name3;
 
   startE:
-  cout << "\t\tChoose:\n\t\t[1] Univariate Data: \n";
-  cout << "\t\t[2] Bivariate Data: \n";
-  cout << "\t\t input X to terminate program\n";
-  cout << "> ";
+  Header();
+  cout << "\nSelect Number of Data Variables:\n[1] Univariate Data: \n";
+  cout << "[2] Bivariate Data: \n";
+  cout << "Stat:|> ";
   //give global command options
   cin >> choice;
 
   switch (choice)
   {
-    case '1':
+    case '1': //Univariate
     {
       startG:
-      cout<< endl<< "Enter the filename of the univariate data: ";
+      cout<< endl<< "\nEnter the filename of the univariate data: \n";
+      cout << "Stat:|Univariate> ";
       cin>>name;
+      if (name == ".")
+      {
+        cout << "\nProgram Terminated\n";
+        return 0;
+      }
       name=name+".txt";
       ifstream file (name.c_str());
       if (!file.is_open())
       {
-        cout << "Sorry, the file can't be open";
+        system("CLS");
+        Header();
+        cout << "\nSorry, the file can't be opened\n";
+        cout << "\nSelect another file\n";
         goto startG;
       }
+
       else
       {
         while (file >> data)
@@ -231,7 +271,8 @@ int main()
         }
       }
 
-      cout<<"Is the data a [1]sample or [2]population: ";
+      cout <<"[1] - sample\n[2] - population: \n";
+      cout << "Stat:|Univariate> ";
       cin>>choice1;
 
       switch(choice1)
@@ -247,9 +288,11 @@ int main()
       }
       break;
     }
-    case '2':
+    case '2': //Bivariate
     {
-      cout<<"X-Y Data is in [1]One File, [2]Separate File: " << endl;
+      cout << "\nFile source: \n";
+      cout<<"[1] - X-Y data in One File\n[2] - X-Y data in Separate Files " << endl;
+      cout << "Stat:|Bivariate> ";
       cin>>choice2;
 
       switch(choice2)
@@ -257,14 +300,15 @@ int main()
         case '1':
         {
           startH:
-          cout<< "Enter the filename of the bivariate data: ";
+          cout<< "\nEnter the filename of the bivariate data: \n";
+          cout << "Stat:|Bivariate|One> ";
           cin>>name1;
           name1=name1+".txt";
 
           ifstream file (name1.c_str());
           if (!file.is_open())
           {
-            cout << "There was a problem opening the input file!\n";
+            cout << "\nThere was a problem opening the input file!\n";
             goto startH;
           }
           while (file>>data)
@@ -302,7 +346,8 @@ int main()
         case '2': //for the separate files
         {
           startJ:
-          cout << "Enter filename of X-data: ";
+          cout << "Enter filename of X-data: \n";
+          cout << "Stat:|Bivariate|Separate|X> ";
           cin >> name1;
           name1=name1+".txt";
 
@@ -318,7 +363,8 @@ int main()
             q.push_back(data);
           }
           startK:
-          cout << "Enter filename of Y-data: ";
+          cout << "Enter filename of Y-data: \n";
+          cout << "Stat:|Bivariate|Separate|Y> ";
           cin >> name2;
           name2=name2+".txt";
           ifstream file1 (name2.c_str());
@@ -375,7 +421,7 @@ int main()
         }
       }
         case '.':
-          cout << "Program Terminated";
+          cout << "\nProgram Terminated\n";
           return 0;
           break;
     }
@@ -413,9 +459,9 @@ int main()
         break;
       }
       default:
-        cout << "Invalid Input";
         system("CLS");
-        cout << "Invalid Input";
+        Header();
+        cout << "\nInvalid Input\n";
         goto startF;
     }
 }
