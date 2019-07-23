@@ -354,13 +354,18 @@ int main()
 
     switch(choice4)
     {
-      case 1:
+      case 1: //YES
       {
         cout << endl<< endl;
+        datavec.clear();
+        a.clear();
+        b.clear();
+        q.clear();
+        w.clear();
         goto startE;
         break;
       }
-      case 2:
+      case 2: //NO
       {
         cout << "Program Ended";
         break;
