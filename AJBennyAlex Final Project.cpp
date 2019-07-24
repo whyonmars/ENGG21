@@ -89,8 +89,8 @@ double getRegression(vector <double> a, vector <double> b, vector <double> datav
   double sum_X = 0, sum_Y = 0, sum_XY = 0;
   double squareSum_X = 0, squareSum_Y = 0;
 
-  cout << endl << "---------------------Linear Regression---------------------"<< endl;
-  cout <<endl<<"X-Data Values\tY-Data Values\t   Residuals \t          SSE\t       SST " << endl;
+  cout << endl << "-------------BIVARIATE DATA-------------"<< endl;
+  cout <<endl<<"X-Data Values\tY-Data Values\t   Residuals \t     SSE\t      SST " << endl;
 
   for (int i = 0; i < n/2; i++)
   {
@@ -118,8 +118,8 @@ double getRegression(vector <double> a, vector <double> b, vector <double> datav
     cout << "  " << a[i];
     cout << "\t\t    " << b[i];
     cout << "\t\t    "<<value2*a[i]+value1;
-    cout << "\t\t    "<<(b[i]-(value2*a[i]+value1))*(b[i]-(value2*a[i]+value1));
-    cout << "\t\t    "<<(b[i]-(n/sum_Y))*(b[i]-(n/sum_Y))<< endl; ///Need to fix
+    cout << "\t    "<<(b[i]-(value2*a[i]+value1))*(b[i]-(value2*a[i]+value1));
+    cout << "\t    "<<(b[i]-(sum_Y/(n/2)))*(b[i]-(sum_Y/(n/2)))<< endl; ///Need to fix
   }
     cout << endl<<"The line equation of the regression  is y = " << value2 <<" x " << "+" <<value1 << endl;
 }
